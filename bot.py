@@ -4,6 +4,6 @@ from config import BOT_TOKEN
 
 app = Application.builder().token(BOT_TOKEN).build()
 
-print("Bot is running...")
+print("Bot is running.aliza.")
 
 app.run_polling()
