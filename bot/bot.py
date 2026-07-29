@@ -1,9 +1,9 @@
 from telegram.ext import Application, CommandHandler
-from config import BOT_TOKEN
+from bot.config import BOT_TOKEN
 
 
-from handlers.start import start
-from handlers.register import register
+from bot.handlers.start import start
+from bot.handlers.register import register
 
 
 app = Application.builder().token(BOT_TOKEN).build()
