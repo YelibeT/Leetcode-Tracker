@@ -11,7 +11,20 @@ async def create_user(telegram_id: int, leetcode_username:str):
                 "leetcode_username":leetcode_username
             }
         )
-
+        if response.status_code==400:
+            return None
         response.raise_for_status()
 
+        return response.json()
+
+
+async def get_user(telegram_id:int):
+    async with httpx.AsyncClient() as client:
+        response=await client.get(
+            f"{API_URL}/users/{telegram_id}"
+        )
+
+        if response.status_code==404:
+            return None
+        response.raise_for_status()
         return response.json()
