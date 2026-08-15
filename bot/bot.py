@@ -21,31 +21,17 @@ from bot.handlers.setup import choose_mode, choose_roadmap
 
 app = Application.builder().token(BOT_TOKEN).build()
 
-
 app.add_handler(CommandHandler("start", start))
-
 app.add_handler(CommandHandler("profile", profile))
-
-
-app.add_handler(
-    CallbackQueryHandler(
-        choose_mode,
-        pattern="^mode_"
-    )
-)
-
-app.add_handler(
-    CallbackQueryHandler(
-        choose_roadmap,
-        pattern="^roadmap_"
-    )
-)
 
 
 register_handler = ConversationHandler(
     entry_points=[
-        CommandHandler("register", register)
+        CommandHandler("register", register),
+        CallbackQueryHandler(choose_mode, pattern="^mode_"),
+        CallbackQueryHandler(choose_roadmap, pattern="^roadmap_")
     ],
+
     states={
         USERNAME: [
             MessageHandler(
@@ -54,6 +40,7 @@ register_handler = ConversationHandler(
             )
         ]
     },
+
     fallbacks=[
         CommandHandler("cancel", cancel)
     ]

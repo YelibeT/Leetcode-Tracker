@@ -8,9 +8,13 @@ USERNAME = 1
 
 
 async def register(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(
-        "Send me your LeetCode username."
-    )
+
+    if update.callback_query:
+        await update.callback_query.answer()
+        await update.callback_query.edit_message_text(
+            "Great choice! 🧠\n\n"
+            "What's your LeetCode username?"
+        )
 
     return USERNAME
 

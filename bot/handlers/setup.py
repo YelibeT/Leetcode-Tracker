@@ -1,6 +1,6 @@
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes
-
+from bot.handlers.register import USERNAME
 
 async def choose_mode(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
@@ -41,6 +41,7 @@ async def choose_mode(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "What's your LeetCode username?"
         )
 
+        return USERNAME
 
 async def choose_roadmap(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
@@ -57,3 +58,5 @@ async def choose_roadmap(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "Excellent choice! 🧠\n\n"
         "What's your LeetCode username?"
     )
+
+    return USERNAME
