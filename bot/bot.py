@@ -3,7 +3,8 @@ from telegram.ext import (
     CommandHandler,
     ConversationHandler,
     MessageHandler,
-    filters
+    filters,
+    CallbackQueryHandler,
 )
 
 from config import BOT_TOKEN
@@ -15,13 +16,31 @@ from bot.handlers.register import (
     USERNAME
 )
 from bot.handlers.profile import profile
+from bot.handlers.setup import choose_mode, choose_roadmap
 
 
 app = Application.builder().token(BOT_TOKEN).build()
 
 
 app.add_handler(CommandHandler("start", start))
+
 app.add_handler(CommandHandler("profile", profile))
+
+
+app.add_handler(
+    CallbackQueryHandler(
+        choose_mode,
+        pattern="^mode_"
+    )
+)
+
+app.add_handler(
+    CallbackQueryHandler(
+        choose_roadmap,
+        pattern="^roadmap_"
+    )
+)
+
 
 register_handler = ConversationHandler(
     entry_points=[
@@ -29,11 +48,17 @@ register_handler = ConversationHandler(
     ],
     states={
         USERNAME: [
-            MessageHandler(filters.TEXT & ~filters.COMMAND, save_username)
+            MessageHandler(
+                filters.TEXT & ~filters.COMMAND,
+                save_username
+            )
         ]
     },
-    fallbacks=[CommandHandler("cancel", cancel)]
+    fallbacks=[
+        CommandHandler("cancel", cancel)
+    ]
 )
+
 
 app.add_handler(register_handler)
 
