@@ -16,7 +16,7 @@ from bot.handlers.register import (
     USERNAME
 )
 from bot.handlers.profile import profile
-from bot.handlers.setup import choose_mode, choose_roadmap
+from bot.handlers.setup import choose_mode, choose_roadmap, go_back, cancel_setup
 
 
 app = Application.builder().token(BOT_TOKEN).build()
@@ -29,7 +29,9 @@ register_handler = ConversationHandler(
     entry_points=[
         CommandHandler("register", register),
         CallbackQueryHandler(choose_mode, pattern="^mode_"),
-        CallbackQueryHandler(choose_roadmap, pattern="^roadmap_")
+        CallbackQueryHandler(choose_roadmap, pattern="^roadmap_"),
+        CallbackQueryHandler(go_back, pattern="^back$"),
+        CallbackQueryHandler(cancel_setup, pattern="^cancel_setup$")
     ],
 
     states={

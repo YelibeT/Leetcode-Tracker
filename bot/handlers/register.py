@@ -12,28 +12,46 @@ async def register(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.callback_query:
         await update.callback_query.answer()
         await update.callback_query.edit_message_text(
-            "Great choice! 🧠\n\n"
+            "Great choice! \n\n"
             "What's your LeetCode username?"
         )
 
     return USERNAME
 
 async def save_username(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    username = update.message.text.strip()
+
+    username = update.message.text
     telegram_id = update.effective_user.id
 
-    user = await create_user(
-        telegram_id,
-        username
-    )
-    if not user:
+    mode = context.user_data.get("mode")
+    roadmap = context.user_data.get("roadmap")
+
+    data = {
+        "telegram_id": telegram_id,
+        "leetcode_username": username,
+        "mode": mode,
+        "roadmap": roadmap
+    }
+
+    try:
+        await create_user(data)
+
         await update.message.reply_text(
-            "You're already registered. User /profile to view your account.")
+            "You're all set!\n\n"
+            f"LeetCode: {username}\n"
+            f"Mode: {mode}"
+        )
+
         return ConversationHandler.END
-    await update.message.reply_text(
-        f"Account registered!\n\n"
-        f"LeetCode username: {user['leetcode_username']}"
-    )
+
+    except Exception as e:
+        print(f"Registration error: {e}")
+
+        await update.message.reply_text(
+            "Something went wrong while registering. Please try again."
+        )
+
+        return USERNAME
     
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
